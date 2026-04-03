@@ -381,7 +381,7 @@ function ItemRow({ item, isLast, onEdit, reload, showToast, COL, sections }) {
   const secName = sections.find(s => s.id===item.section_id)?.name || 'No section';
 
   return (
-    <div style={{ display:'grid', gridTemplateColumns:`${COL.img}px 1fr ${COL.price}px ${COL.tags}px ${COL.feat}px ${COL.actions}px`, padding:'10px 16px', gap:12, alignItems:'center', borderBottom:isLast?'none':`1px solid ${T.border}`, transition:'background 0.15s', position:'relative' }}
+    <div className="item-row" style={{ display:'grid', gridTemplateColumns:`${COL.img}px 1fr ${COL.price}px ${COL.tags}px ${COL.feat}px ${COL.actions}px`, padding:'10px 16px', gap:12, alignItems:'center', borderBottom:isLast?'none':`1px solid ${T.border}`, transition:'background 0.15s', position:'relative' }}
       onMouseEnter={e => e.currentTarget.style.background='#1c1c1c'}
       onMouseLeave={e => e.currentTarget.style.background='transparent'}
     >
@@ -537,7 +537,7 @@ function MenuManager({ sections, items, reload, showToast }) {
       </div>
 
       {/* Stats */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:14, marginBottom:20 }}>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:14, marginBottom:20, className:'stat-grid' }}>
         {[
           { label:'Total Items',  value:stats.total,     color:T.blue },
           { label:'Available',    value:stats.available, color:T.green },
@@ -845,7 +845,7 @@ function ItemModal({ item, sections, onClose, reload, showToast }) {
   return (
     <>
     <Modal title={item?'Edit Item':'Add New Item'} onClose={onClose} wide>
-      <div style={{ display:'grid', gridTemplateColumns:'1.2fr 1fr', gap:24 }}>
+      <div style={{ display:'grid', gridTemplateColumns:'1.2fr 1fr', gap:24 }} className='promo-grid'>
         <div style={{ display:'flex', flexDirection:'column', gap:18 }}>
           <Field label="Item Name" error={errors.name}>
             <Input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Chicken Cheese Kottu" style={{ fontSize:15, padding:'12px 14px' }}/>
@@ -1590,7 +1590,7 @@ function PromoModal({ promo, onClose, reload, showToast }) {
 
   return (
     <Modal title={promo ? 'Edit Announcement' : 'New Announcement'} onClose={onClose} wide>
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:24 }}>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:24 }} className='promo-grid'>
 
         {/* ── LEFT col ── */}
         <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
@@ -2145,19 +2145,38 @@ export default function AdminApp() {
         @media(max-width:768px){
           .hdp-sidebar {
             transform:translateX(-100%) !important;
-            width:260px !important;
-            z-index:99 !important;
+            width:280px !important;
+            z-index:200 !important;
+            position:fixed !important;
+            top:0; left:0; bottom:0;
           }
           .hdp-sidebar.open { transform:translateX(0) !important; }
           .hdp-topbar {
-            display:flex; align-items:center; justify-content:space-between;
-            padding:10px 14px;
+            display:flex !important; align-items:center; justify-content:space-between;
+            padding:12px 16px;
             background:${T.surface};
             border-bottom:1px solid ${T.border};
             position:sticky; top:0; z-index:50;
           }
           .hdp-main    { margin-left:0 !important; }
-          .hdp-content { padding:14px; }
+          .hdp-content { padding:12px 10px; }
+          .tbl-scroll  { overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:12px; }
+
+          /* Stack stat cards vertically */
+          .stat-grid   { grid-template-columns:1fr 1fr !important; gap:8px !important; }
+
+          /* Make modal full screen on mobile */
+          .modal-wide  { max-width:100% !important; margin:0 !important; border-radius:16px 16px 0 0 !important; position:fixed !important; bottom:0 !important; left:0 !important; right:0 !important; max-height:92vh !important; overflow-y:auto !important; }
+          .modal-grid  { grid-template-columns:1fr !important; }
+
+          /* Announcement modal stacks on mobile */
+          .promo-grid  { grid-template-columns:1fr !important; }
+
+          /* Item rows on mobile */
+          .item-row { grid-template-columns:44px 1fr auto !important; gap:8px !important; flex-wrap:wrap; }
+          .item-row .col-price { display:none; }
+          .item-row .col-tags  { display:none; }
+          .item-row .col-feat  { display:none; }
         }
       `}</style>
     </div>
