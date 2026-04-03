@@ -474,7 +474,7 @@ export default function MenuPage() {
   const [menuData, setMenuData]     = useState(null)
   const [loading, setLoading]       = useState(true)
   const [waPulse, setWaPulse]       = useState(false)
-  const [showSearch, setShowSearch]   = useState(false)
+  const [showSearch, setShowSearch]   = useState(true)
   const [filterAvail, setFilterAvail] = useState(false)
   const [filterTag, setFilterTag]     = useState(null)
   const [showFilter, setShowFilter]   = useState(false)
@@ -885,6 +885,9 @@ export default function MenuPage() {
         .show-sm   { display: none; }
         @media (max-width: 900px) { .sidebar { display: none !important; } }
         @media (max-width: 480px) { .hide-sm { display: none !important; } .show-sm { display: inline !important; } }
+        @media (max-width: 768px) {
+          .search-wrap { flex:1 !important; }
+        }
         @media (min-width: 769px) { .mob-call { display: none !important; } }
       `}</style>
     </div>

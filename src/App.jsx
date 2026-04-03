@@ -335,6 +335,7 @@ export default function App(){
   const [modal,setModal]=useState(null)
   const [featuredItems,setFeaturedItems]=useState([])
   const [promos,setPromos]=useState([])
+  const [reviewIdx,setReviewIdx]=useState(0)
   const [promoIdx,setPromoIdx]=useState(0)
   const [promoOpen,setPromoOpen]=useState(false)
   const [promoBanner,setPromoBanner]=useState(false)
@@ -590,7 +591,9 @@ export default function App(){
               <span style={{fontSize:13,color:T.muted}}>· 500+ reviews on Google</span>
             </div>
           </div>
-          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))',gap:16,marginBottom:48}}>
+
+          {/* Desktop — grid */}
+          <div className="reviews-desktop" style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))',gap:16,marginBottom:48}}>
             {REVIEWS.map((r,i)=>(
               <div key={i} style={{background:T.card,border:`1px solid ${T.border}`,borderRadius:18,padding:'22px 24px',position:'relative',transition:'all 0.2s'}}
                 onMouseEnter={e=>{e.currentTarget.style.borderColor=A+'55';e.currentTarget.style.transform='translateY(-3px)'}}
@@ -610,6 +613,48 @@ export default function App(){
               </div>
             ))}
           </div>
+
+          {/* Mobile — carousel */}
+          <div className="reviews-mobile" style={{display:'none',marginBottom:32}}>
+            <div style={{position:'relative'}}>
+              <div style={{background:T.card,border:`1px solid ${T.border}`,borderRadius:18,padding:'22px 24px',position:'relative',minHeight:180}}>
+                <Quote size={22} color={A+'44'} style={{position:'absolute',top:18,right:18}}/>
+                <div style={{display:'flex',gap:3,marginBottom:12}}>{[1,2,3,4,5].map(s=><Star key={s} size={12} color='#f59e0b' fill='#f59e0b'/>)}</div>
+                <p style={{margin:'0 0 16px',fontSize:13,color:T.muted,lineHeight:1.75,fontStyle:'italic'}}>"{REVIEWS[reviewIdx].text}"</p>
+                <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+                  <div style={{display:'flex',alignItems:'center',gap:8}}>
+                    <div style={{width:32,height:32,borderRadius:'50%',background:A+'22',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                      <span style={{fontSize:13,fontWeight:800,color:A}}>{REVIEWS[reviewIdx].name[0]}</span>
+                    </div>
+                    <span style={{fontSize:12,fontWeight:700,color:T.text}}>{REVIEWS[reviewIdx].name}</span>
+                  </div>
+                  <span style={{fontSize:9,fontWeight:700,color:T.muted,letterSpacing:'0.15em',textTransform:'uppercase',background:T.border,padding:'3px 8px',borderRadius:6}}>{REVIEWS[reviewIdx].platform}</span>
+                </div>
+              </div>
+              {/* Nav */}
+              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginTop:16,padding:'0 4px'}}>
+                <button onClick={()=>setReviewIdx(i=>Math.max(0,i-1))} disabled={reviewIdx===0}
+                  style={{background:'none',border:`1px solid ${T.border}`,borderRadius:'50%',width:36,height:36,display:'flex',alignItems:'center',justifyContent:'center',cursor:reviewIdx===0?'default':'pointer',color:reviewIdx===0?T.border:T.text,transition:'all 0.2s'}}
+                  onMouseEnter={e=>{if(reviewIdx>0){e.currentTarget.style.borderColor=A;e.currentTarget.style.color=A}}}
+                  onMouseLeave={e=>{e.currentTarget.style.borderColor=T.border;e.currentTarget.style.color=reviewIdx===0?T.border:T.text}}>
+                  <ChevronLeft size={16}/>
+                </button>
+                <div style={{display:'flex',gap:6}}>
+                  {REVIEWS.map((_,i)=>(
+                    <div key={i} onClick={()=>setReviewIdx(i)}
+                      style={{width:i===reviewIdx?20:7,height:7,borderRadius:4,background:i===reviewIdx?A:T.border,transition:'all 0.3s',cursor:'pointer'}}/>
+                  ))}
+                </div>
+                <button onClick={()=>setReviewIdx(i=>Math.min(REVIEWS.length-1,i+1))} disabled={reviewIdx===REVIEWS.length-1}
+                  style={{background:'none',border:`1px solid ${T.border}`,borderRadius:'50%',width:36,height:36,display:'flex',alignItems:'center',justifyContent:'center',cursor:reviewIdx===REVIEWS.length-1?'default':'pointer',color:reviewIdx===REVIEWS.length-1?T.border:T.text,transition:'all 0.2s'}}
+                  onMouseEnter={e=>{if(reviewIdx<REVIEWS.length-1){e.currentTarget.style.borderColor=A;e.currentTarget.style.color=A}}}
+                  onMouseLeave={e=>{e.currentTarget.style.borderColor=T.border;e.currentTarget.style.color=reviewIdx===REVIEWS.length-1?T.border:T.text}}>
+                  <ChevronRight size={16}/>
+                </button>
+              </div>
+            </div>
+          </div>
+
           <div style={{textAlign:'center'}}>
             <a href="https://www.google.com/search?q=Hotel+de+Plaza+Colombo+reviews" target="_blank" rel="noopener noreferrer"
               style={{display:'inline-flex',alignItems:'center',gap:8,background:'none',border:`1px solid ${T.border}`,borderRadius:12,padding:'12px 28px',color:T.text,textDecoration:'none',fontSize:13,fontWeight:700,transition:'all 0.2s'}}
@@ -669,7 +714,7 @@ export default function App(){
             <p style={{color:'rgba(255,255,255,0.35)',fontSize:12,lineHeight:1.9,maxWidth:220,marginBottom:20}}>Colombo's original late-night kottu spot.<br/>Est. 2009 · One location, no branches.</p>
             <div style={{display:'flex',gap:3,marginBottom:20}}>{[1,2,3,4,5].map(i=><Star key={i} size={12} color={A} fill={A}/>)}<span style={{fontSize:11,color:'rgba(255,255,255,0.3)',marginLeft:6,fontWeight:600}}>4.8 on Google</span></div>
             <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-              {[{href:'https://facebook.com/hoteldeplaza',label:'f',title:'Facebook'},{href:'https://instagram.com/hoteldeplaza',label:'in',title:'Instagram'},{href:'https://tiktok.com/@hoteldeplaza',label:'tt',title:'TikTok'},{href:`https://wa.me/${WHATSAPP_NUM}`,label:'wa',title:'WhatsApp'},{href:'https://tripadvisor.com',label:'TA',title:'TripAdvisor'},{href:'https://g.page/r/hoteldeplaza',label:'G',title:'Google Reviews'}].map((s,i)=>(
+              {[{href:'https://web.facebook.com/hoteldeplaza',label:'f',title:'Facebook'},{href:'https://www.instagram.com/hotelde.plaza/',label:'in',title:'Instagram'},{href:'https://www.tiktok.com/@plazahote3',label:'tt',title:'TikTok'},{href:`https://wa.me/${WHATSAPP_NUM}`,label:'wa',title:'WhatsApp'},{href:'https://tripadvisor.com',label:'TA',title:'TripAdvisor'},{href:'https://g.page/r/hoteldeplaza',label:'G',title:'Google Reviews'}].map((s,i)=>(
                 <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" title={s.title}
                   style={{width:34,height:34,borderRadius:9,background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.08)',display:'flex',alignItems:'center',justifyContent:'center',color:'rgba(255,255,255,0.4)',textDecoration:'none',fontSize:10,fontWeight:900,transition:'all 0.2s'}}
                   onMouseEnter={e=>{e.currentTarget.style.background=A;e.currentTarget.style.color='#fff';e.currentTarget.style.borderColor=A;e.currentTarget.style.transform='translateY(-2px)'}}
@@ -871,7 +916,14 @@ export default function App(){
         @keyframes slideUpBanner{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
         ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
         .nav-desktop{display:flex}.nav-mobile{display:none}
-        @media(max-width:768px){.nav-desktop{display:none!important}.nav-mobile{display:flex!important}}
+        .reviews-mobile{display:none!important}
+        .reviews-desktop{display:grid}
+        @media(max-width:768px){
+          .nav-desktop{display:none!important}
+          .nav-mobile{display:flex!important}
+          .reviews-mobile{display:block!important}
+          .reviews-desktop{display:none!important}
+        }
       `}</style>
     </div>
   )
