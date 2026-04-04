@@ -564,7 +564,7 @@ function MenuManager({ sections, items, reload, showToast }) {
       <div className="tbl-scroll">
       <div style={{ background:T.card, border:`1px solid ${T.border}`, borderRadius:16, overflow:'hidden', minWidth:700 }}>
         {/* Header */}
-        <div style={{ display:'grid', gridTemplateColumns:`${COL.img}px 1fr ${COL.price}px ${COL.tags}px ${COL.feat}px ${COL.actions}px`, background:T.surface, borderBottom:`1px solid ${T.border}`, padding:'10px 16px', gap:12, alignItems:'center' }}>
+        <div className='tbl-header' style={{ display:'grid', gridTemplateColumns:`${COL.img}px 1fr ${COL.price}px ${COL.tags}px ${COL.feat}px ${COL.actions}px`, background:T.surface, borderBottom:`1px solid ${T.border}`, padding:'10px 16px', gap:12, alignItems:'center' }}>
           {COL_HEADERS.map((h,i) => (
             h.tip ? (
               <Tooltip key={i} text={h.tip}>
@@ -2153,30 +2153,49 @@ export default function AdminApp() {
           .hdp-sidebar.open { transform:translateX(0) !important; }
           .hdp-topbar {
             display:flex !important; align-items:center; justify-content:space-between;
-            padding:12px 16px;
+            padding:10px 14px;
             background:${T.surface};
             border-bottom:1px solid ${T.border};
             position:sticky; top:0; z-index:50;
           }
           .hdp-main    { margin-left:0 !important; }
           .hdp-content { padding:12px 10px; }
-          .tbl-scroll  { overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:12px; }
+          .tbl-scroll  { overflow-x:auto; -webkit-overflow-scrolling:touch; }
 
-          /* Stack stat cards vertically */
-          .stat-grid   { grid-template-columns:1fr 1fr !important; gap:8px !important; }
+          /* Stat cards 2 col */
+          .stat-grid { grid-template-columns:1fr 1fr !important; gap:8px !important; }
 
-          /* Make modal full screen on mobile */
-          .modal-wide  { max-width:100% !important; margin:0 !important; border-radius:16px 16px 0 0 !important; position:fixed !important; bottom:0 !important; left:0 !important; right:0 !important; max-height:92vh !important; overflow-y:auto !important; }
-          .modal-grid  { grid-template-columns:1fr !important; }
+          /* Modals full screen on mobile */
+          .modal-box {
+            position:fixed !important; bottom:0 !important; left:0 !important;
+            right:0 !important; top:auto !important; max-width:100% !important;
+            border-radius:20px 20px 0 0 !important; max-height:92vh !important;
+            overflow-y:auto !important; margin:0 !important;
+          }
+          .promo-grid { grid-template-columns:1fr !important; }
 
-          /* Announcement modal stacks on mobile */
-          .promo-grid  { grid-template-columns:1fr !important; }
+          /* Item table — convert to card list on mobile */
+          .item-row {
+            grid-template-columns:44px 1fr auto !important;
+            gap:6px !important;
+            padding:10px 12px !important;
+          }
+          /* Hide price/tags/feat cols on mobile - show inline below name */
+          .col-price { display:none !important; }
+          .col-tags  { display:none !important; }
+          .col-feat  { display:none !important; }
 
-          /* Item rows on mobile */
-          .item-row { grid-template-columns:44px 1fr auto !important; gap:8px !important; flex-wrap:wrap; }
-          .item-row .col-price { display:none; }
-          .item-row .col-tags  { display:none; }
-          .item-row .col-feat  { display:none; }
+          /* Table headers hidden on mobile */
+          .tbl-header { display:none !important; }
+
+          /* Section headers smaller */
+          .section-header { padding:7px 12px !important; }
+
+          /* Buttons smaller on mobile */
+          .hdp-content button { min-height:36px; }
+
+          /* Add/Edit item modal grid */
+          .item-modal-grid { grid-template-columns:1fr !important; }
         }
       `}</style>
     </div>

@@ -568,135 +568,37 @@ export default function MenuPage() {
         borderBottom: `1px solid ${T.border}`,
         backdropFilter: 'blur(24px)',
       }}>
-        {/* Main row */}
-        <div className='menu-topbar-row' style={{ padding: '0 24px', height: 64, display: 'flex', alignItems: 'center', gap: 10 }}>
-
-          {/* Back + Brand */}
-          <button onClick={() => navigate('/')} style={{ background: 'none', border: `1px solid ${T.border}`, borderRadius: 10, padding: '7px 12px', cursor: 'pointer', color: T.muted, display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 700, fontFamily: "'DM Sans',sans-serif", flexShrink: 0, transition: 'all 0.2s' }}
+        {/* ── Row 1: back + logo + actions ── */}
+        <div style={{ padding: '0 16px', height: 58, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button onClick={() => navigate('/')} style={{ background: 'none', border: `1px solid ${T.border}`, borderRadius: 10, width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: T.muted, flexShrink: 0 }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = T.accent; e.currentTarget.style.color = T.accent }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted }}
-          >
-            <ArrowLeft size={13} />
+            onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted }}>
+            <ArrowLeft size={15} />
           </button>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-            <img src={logoImg} alt="Hotel de Plaza" style={{ height: 40, width: 'auto', objectFit: 'contain' }} />
-            <div>
-              <p style={{ margin: 0, fontSize: 9, color: '#22c55e', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 3 }}>
-                <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#22c55e', display: 'inline-block', animation: 'pulse 2s infinite' }} />
-                Open 24/7
-              </p>
-            </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+            <img src={logoImg} alt="Hotel de Plaza" style={{ height: 36, width: 'auto', objectFit: 'contain' }} />
+            <span style={{ fontSize: 8, color: '#22c55e', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 3 }}>
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#22c55e', display: 'inline-block', animation: 'pulse 2s infinite' }} />
+              Open 24/7
+            </span>
           </div>
 
-          {/* Search — expands inline */}
-          <div className='search-wrap' style={{ flex: 1, position: 'relative', minWidth: 0 }}>
-            {showSearch ? (
-              <div style={{ position: 'relative', animation: 'slideDown 0.18s ease' }}>
-                <Search size={13} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: T.muted }} />
-                <input
-                  ref={searchRef}
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                  placeholder="Search menu…  try 'biriani', 'chiken kotu'…"
-                  style={{ width: '100%', background: dark ? '#1c1c1c' : '#fff', border: `1.5px solid ${T.accent}`, borderRadius: 10, padding: '9px 36px 9px 34px', fontSize: 12, color: T.text, outline: 'none', boxSizing: 'border-box', fontFamily: "'DM Sans',sans-serif" }}
-                />
-                {search && (
-                  <button onClick={() => setSearch('')} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: T.border, border: 'none', borderRadius: '50%', width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: T.muted }}>
-                    <X size={9} />
-                  </button>
-                )}
-              </div>
-            ) : (
-              /* "Did you mean" chip when search closed but suggestion exists */
-              suggestion && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px', background: dark ? '#1a1a1a' : '#fff8f4', border: `1px solid ${T.accent}44`, borderRadius: 8, animation: 'slideDown 0.18s ease' }}>
-                  <AlertCircle size={11} color={T.accent} />
-                  <span style={{ fontSize: 11, color: T.muted }}>
-                    Did you mean{' '}
-                    <button onClick={() => { setSearch(suggestion); setShowSearch(true) }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: T.accent, fontWeight: 800, fontSize: 11, padding: 0, textDecoration: 'underline' }}>{suggestion}</button>?
-                  </span>
-                </div>
-              )
-            )}
-          </div>
+          <div style={{ flex: 1 }}/>
 
-          {/* Right action buttons */}
-          <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexShrink: 0 }}>
+          {/* Right buttons — compact */}
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
             {/* Search toggle */}
             <button onClick={() => { setShowSearch(s => !s); if (showSearch) setSearch('') }}
-              style={{ background: showSearch ? T.accent : 'transparent', border: `1px solid ${showSearch ? T.accent : T.border}`, borderRadius: 10, width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: showSearch ? '#fff' : T.muted, transition: 'all 0.2s', position: 'relative' }}>
+              style={{ background: showSearch ? T.accent : 'transparent', border: `1px solid ${showSearch ? T.accent : T.border}`, borderRadius: 10, width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: showSearch ? '#fff' : T.muted, transition: 'all 0.2s' }}>
               <Search size={14} />
             </button>
 
-            {/* Filter button */}
-            <div style={{ position: 'relative' }}>
-              <button
-                onClick={() => setShowFilter(f => !f)}
-                style={{
-                  background: (filterAvail || filterTag) ? T.accent + '18' : 'transparent',
-                  border: `1px solid ${(filterAvail || filterTag) ? T.accent : T.border}`,
-                  borderRadius: 10, width: 36, height: 36,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  cursor: 'pointer', color: (filterAvail || filterTag) ? T.accent : T.muted,
-                  transition: 'all 0.2s', position: 'relative',
-                }}>
-                <SlidersHorizontal size={14} />
-                {(filterAvail || filterTag) && (
-                  <span style={{ position: 'absolute', top: 6, right: 6, width: 6, height: 6, borderRadius: '50%', background: T.accent }} />
-                )}
-              </button>
 
-              {/* Filter dropdown */}
-              {showFilter && (
-                <div style={{
-                  position: 'absolute', top: 44, right: 0, zIndex: 200,
-                  background: dark ? '#1a1a1a' : '#fff',
-                  border: `1px solid ${T.border}`,
-                  borderRadius: 16, padding: 18, width: 240,
-                  boxShadow: `0 16px 40px ${dark ? 'rgba(0,0,0,0.6)' : 'rgba(0,0,0,0.15)'}`,
-                  animation: 'slideDown 0.18s ease',
-                }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-                    <p style={{ margin: 0, fontSize: 11, fontWeight: 800, color: T.text, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Filters</p>
-                    {(filterAvail || filterTag) && (
-                      <button onClick={() => { setFilterAvail(false); setFilterTag(null) }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: T.accent, fontSize: 11, fontWeight: 700, padding: 0 }}>Clear all</button>
-                    )}
-                  </div>
-
-                  {/* Available only */}
-                  <div
-                    onClick={() => setFilterAvail(f => !f)}
-                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: 10, border: `1px solid ${filterAvail ? '#22c55e44' : T.border}`, background: filterAvail ? 'rgba(34,197,94,0.08)' : 'transparent', cursor: 'pointer', marginBottom: 10, transition: 'all 0.15s' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
-                      <span style={{ fontSize: 12, fontWeight: 700, color: T.text }}>Available only</span>
-                    </div>
-                    <div style={{ width: 36, height: 20, borderRadius: 999, background: filterAvail ? '#22c55e' : T.border, position: 'relative', transition: 'background 0.2s' }}>
-                      <div style={{ position: 'absolute', top: 3, left: filterAvail ? 19 : 3, width: 14, height: 14, borderRadius: '50%', background: '#fff', transition: 'left 0.2s', boxShadow: '0 1px 3px rgba(0,0,0,0.3)' }} />
-                    </div>
-                  </div>
-
-                  {/* Tag filters */}
-                  <p style={{ margin: '0 0 8px', fontSize: 10, fontWeight: 700, color: T.muted, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Item Type</p>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    {Object.entries(TAG_CONFIG).map(([key, cfg]) => (
-                      <div key={key}
-                        onClick={() => setFilterTag(t => t === key ? null : key)}
-                        style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 10, border: `1px solid ${filterTag === key ? cfg.color + '55' : T.border}`, background: filterTag === key ? cfg.color + '12' : 'transparent', cursor: 'pointer', transition: 'all 0.15s' }}>
-                        <div style={{ width: 8, height: 8, borderRadius: '50%', background: cfg.color, flexShrink: 0 }} />
-                        <span style={{ fontSize: 12, fontWeight: 700, color: filterTag === key ? cfg.color : T.text, flex: 1 }}>{cfg.label}</span>
-                        {filterTag === key && <span style={{ fontSize: 10, color: cfg.color, fontWeight: 800 }}>✓</span>}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
 
             {/* Uber Eats */}
             <a href={UBER_EATS_URL} target="_blank" rel="noopener noreferrer"
-              style={{ background: T.accent, color: '#fff', textDecoration: 'none', borderRadius: 10, padding: '8px 14px', fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 5, boxShadow: `0 4px 12px ${T.accent}44`, whiteSpace: 'nowrap' }}>
+              style={{ background: T.accent, color: '#fff', textDecoration: 'none', borderRadius: 10, padding: '8px 12px', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', gap: 4, boxShadow: `0 4px 12px ${T.accent}44`, whiteSpace: 'nowrap' }}>
               <ShoppingBag size={12} />
               <span className="hide-sm">Uber Eats</span>
             </a>
@@ -705,6 +607,61 @@ export default function MenuPage() {
             <button onClick={() => setDark(!dark)} style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: '50%', width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: T.text }}>
               {dark ? <Sun size={13} /> : <Moon size={13} />}
             </button>
+          </div>
+        </div>
+
+        {/* ── Row 2: Search bar — always visible ── */}
+        <div style={{ padding: '0 16px 10px', display: 'flex', gap: 8 }}>
+          <div style={{ flex: 1, position: 'relative' }}>
+            <Search size={13} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: T.muted, pointerEvents: 'none' }} />
+            <input
+              ref={searchRef}
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search menu… try 'kottu', 'biriani'…"
+              style={{ width: '100%', background: dark ? '#1c1c1c' : '#fff', border: `1.5px solid ${search ? T.accent : T.border}`, borderRadius: 12, padding: '10px 36px 10px 34px', fontSize: 13, color: T.text, outline: 'none', boxSizing: 'border-box', fontFamily: "'DM Sans',sans-serif", transition: 'border-color 0.2s' }}
+            />
+            {search && (
+              <button onClick={() => setSearch('')} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: T.border, border: 'none', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: T.muted }}>
+                <X size={10} />
+              </button>
+            )}
+          </div>
+          {/* Filter button */}
+          <div style={{ position: 'relative', flexShrink: 0 }}>
+            <button onClick={e => { e.stopPropagation(); setShowFilter(f => !f) }}
+              style={{ background: (filterAvail || filterTag) ? T.accent+'18' : T.surface, border: `1px solid ${(filterAvail || filterTag) ? T.accent : T.border}`, borderRadius: 12, width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: (filterAvail || filterTag) ? T.accent : T.muted, position: 'relative' }}>
+              <SlidersHorizontal size={15} />
+              {(filterAvail || filterTag) && <span style={{ position: 'absolute', top: 8, right: 8, width: 6, height: 6, borderRadius: '50%', background: T.accent }}/>}
+            </button>
+            {showFilter && (
+              <div style={{ position: 'absolute', top: 50, right: 0, zIndex: 200, background: dark ? '#1a1a1a' : '#fff', border: `1px solid ${T.border}`, borderRadius: 16, padding: 18, width: 260, boxShadow: `0 16px 40px ${dark ? 'rgba(0,0,0,0.6)' : 'rgba(0,0,0,0.15)'}`, animation: 'slideDown 0.18s ease' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                  <p style={{ margin: 0, fontSize: 11, fontWeight: 800, color: T.text, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Filters</p>
+                  {(filterAvail || filterTag) && <button onClick={() => { setFilterAvail(false); setFilterTag(null) }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: T.accent, fontSize: 11, fontWeight: 700, padding: 0 }}>Clear all</button>}
+                </div>
+                <div onClick={() => setFilterAvail(f => !f)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: 10, border: `1px solid ${filterAvail ? '#22c55e44' : T.border}`, background: filterAvail ? 'rgba(34,197,94,0.08)' : 'transparent', cursor: 'pointer', marginBottom: 10 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
+                    <span style={{ fontSize: 12, fontWeight: 700, color: T.text }}>Available only</span>
+                  </div>
+                  <div style={{ width: 36, height: 20, borderRadius: 999, background: filterAvail ? '#22c55e' : T.border, position: 'relative', transition: 'background 0.2s' }}>
+                    <div style={{ position: 'absolute', top: 3, left: filterAvail ? 19 : 3, width: 14, height: 14, borderRadius: '50%', background: '#fff', transition: 'left 0.2s', boxShadow: '0 1px 3px rgba(0,0,0,0.3)' }} />
+                  </div>
+                </div>
+                <p style={{ margin: '0 0 8px', fontSize: 10, fontWeight: 700, color: T.muted, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Item Type</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {Object.entries(TAG_CONFIG).map(([key, cfg]) => (
+                    <div key={key} onClick={() => setFilterTag(t => t === key ? null : key)}
+                      style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 10, border: `1px solid ${filterTag === key ? cfg.color+'55' : T.border}`, background: filterTag === key ? cfg.color+'12' : 'transparent', cursor: 'pointer' }}>
+                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: cfg.color, flexShrink: 0 }} />
+                      <span style={{ fontSize: 12, fontWeight: 700, color: filterTag === key ? cfg.color : T.text, flex: 1 }}>{cfg.label}</span>
+                      {filterTag === key && <span style={{ fontSize: 10, color: cfg.color, fontWeight: 800 }}>✓</span>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
