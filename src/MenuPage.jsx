@@ -569,7 +569,7 @@ export default function MenuPage() {
         backdropFilter: 'blur(24px)',
       }}>
         {/* Main row */}
-        <div style={{ padding: '0 24px', height: 64, display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div className='menu-topbar-row' style={{ padding: '0 24px', height: 64, display: 'flex', alignItems: 'center', gap: 10 }}>
 
           {/* Back + Brand */}
           <button onClick={() => navigate('/')} style={{ background: 'none', border: `1px solid ${T.border}`, borderRadius: 10, padding: '7px 12px', cursor: 'pointer', color: T.muted, display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 700, fontFamily: "'DM Sans',sans-serif", flexShrink: 0, transition: 'all 0.2s' }}
@@ -590,7 +590,7 @@ export default function MenuPage() {
           </div>
 
           {/* Search — expands inline */}
-          <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
+          <div className='search-wrap' style={{ flex: 1, position: 'relative', minWidth: 0 }}>
             {showSearch ? (
               <div style={{ position: 'relative', animation: 'slideDown 0.18s ease' }}>
                 <Search size={13} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: T.muted }} />
@@ -709,7 +709,7 @@ export default function MenuPage() {
         </div>
 
         {/* Category pills — single row */}
-        <div style={{ display: 'flex', gap: 7, overflowX: 'auto', padding: '0 24px 12px' }} className="no-scrollbar">
+        <div className='menu-pills-row no-scrollbar' style={{ display: 'flex', gap: 7, overflowX: 'auto', padding: '0 24px 12px' }}>
           {menuWithAll.map(cat => {
             const count = itemCounts[cat.category] || 0
             const isActive = activeCat === cat.category
@@ -727,7 +727,7 @@ export default function MenuPage() {
                     window.scrollTo({ top: 0, behavior: 'smooth' })
                   }
                 }}
-                style={{
+                className='menu-pill' style={{
                   whiteSpace: 'nowrap', padding: '7px 14px', borderRadius: 10,
                   border: `1.5px solid ${isActive ? T.accent : T.border}`,
                   background: isActive ? T.accent : T.surface,
@@ -749,10 +749,10 @@ export default function MenuPage() {
       </div>
 
       {/* ══ LAYOUT ═══════════════════════════════════════════ */}
-      <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 28px 100px', display: 'flex', gap: 36 }}>
+      <div className='menu-layout' style={{ maxWidth: 1400, margin: '0 auto', padding: '0 28px 100px', display: 'flex', gap: 36 }}>
 
         {/* Sidebar — desktop only */}
-        <aside className="sidebar" style={{ width: 210, flexShrink: 0, paddingTop: 36 }}>
+        <aside className='menu-sidebar' style={{ width: 210, flexShrink: 0, paddingTop: 36 }}>
           <div style={{ position: 'sticky', top: 130 }}>
             <p style={{ fontSize: 10, fontWeight: 800, color: T.muted, letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: 12, paddingLeft: 14 }}>Sections</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -834,7 +834,7 @@ export default function MenuPage() {
                   </div>
 
                   {/* Card grid */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 14 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 12 }}>
                     {sub.items.map((item, ii) => (
                       <ItemCard key={item.id || ii} item={item} T={T} dark={dark} />
                     ))}
@@ -886,7 +886,12 @@ export default function MenuPage() {
         @media (max-width: 900px) { .sidebar { display: none !important; } }
         @media (max-width: 480px) { .hide-sm { display: none !important; } .show-sm { display: inline !important; } }
         @media (max-width: 768px) {
-          .search-wrap { flex:1 !important; }
+          .search-wrap { flex:1 !important; min-width:0; }
+          .menu-topbar-row { flex-wrap:wrap; gap:8px; height:auto !important; padding:10px 16px !important; }
+          .menu-pills-row  { padding:0 12px 10px !important; gap:6px !important; }
+          .menu-pill       { padding:6px 12px !important; font-size:10px !important; }
+          .menu-layout     { padding:0 12px 80px !important; gap:0 !important; }
+          .menu-sidebar    { display:none !important; }
         }
         @media (min-width: 769px) { .mob-call { display: none !important; } }
       `}</style>

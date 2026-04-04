@@ -129,8 +129,11 @@ function FeaturedCard({item,T,dark}){
       <div style={{height:190,overflow:'hidden',position:'relative',background:dark?'#1a1a1a':'#f0ece6'}}>
         {item.image_url
           ?<img src={item.image_url} alt={item.name} style={{width:'100%',height:'100%',objectFit:'cover',transition:'transform 0.45s',transform:hov?'scale(1.08)':'scale(1)'}}/>
-          :<div style={{width:'100%',height:'100%',display:'flex',alignItems:'center',justifyContent:'center',background:`repeating-linear-gradient(45deg,${dark?'#1a1a1a':'#f0ece6'} 0,${dark?'#1a1a1a':'#f0ece6'} 10px,${dark?'#1e1e1e':'#ebe6df'} 10px,${dark?'#1e1e1e':'#ebe6df'} 20px)`}}>
-            <UtensilsCrossed size={36} color={T.muted}/>
+          :<div style={{width:'100%',height:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:10,background:dark?'linear-gradient(135deg,#1a1a1a,#111)':'linear-gradient(135deg,#f0ece6,#ebe6df)'}}>
+            <div style={{width:56,height:56,borderRadius:'50%',background:T.accent+'18',border:`2px solid ${T.accent}33`,display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <UtensilsCrossed size={24} color={T.accent}/>
+            </div>
+            <span style={{fontSize:9,fontWeight:700,color:T.muted,letterSpacing:'0.15em',textTransform:'uppercase'}}>No photo yet</span>
           </div>
         }
         <div style={{position:'absolute',inset:0,background:'linear-gradient(to top,rgba(0,0,0,0.6) 0%,transparent 55%)'}}/>
@@ -336,6 +339,12 @@ export default function App(){
   const [featuredItems,setFeaturedItems]=useState([])
   const [promos,setPromos]=useState([])
   const [reviewIdx,setReviewIdx]=useState(0)
+
+  // Auto-rotate reviews every 4 seconds
+  useEffect(()=>{
+    const t = setInterval(()=>setReviewIdx(i=>(i+1)%REVIEWS.length), 4000)
+    return ()=>clearInterval(t)
+  },[])
   const [promoIdx,setPromoIdx]=useState(0)
   const [promoOpen,setPromoOpen]=useState(false)
   const [promoBanner,setPromoBanner]=useState(false)
@@ -916,6 +925,7 @@ export default function App(){
         @keyframes slideUpBanner{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
         ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
         .nav-desktop{display:flex}.nav-mobile{display:none}
+        /* Fix favicon dynamically */
         .reviews-mobile{display:none!important}
         .reviews-desktop{display:grid}
         @media(max-width:768px){
