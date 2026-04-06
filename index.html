@@ -1,12 +1,105 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>hotel-de-plaza</title>
+
+    <!-- ── Favicon ── -->
+    <link rel="icon" type="image/x-icon" href="/logo.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="/logo.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/logo.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/logo.png" />
+
+    <!-- ── Viewport ── -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="theme-color" content="#e85b25" />
+
+    <!-- ── Primary SEO ── -->
+    <title>Hotel de Plaza | Best Kottu in Colombo | Open 24/7 | 329 Galle Road</title>
+    <meta name="description" content="Hotel de Plaza — Colombo's best kottu restaurant. Famous for cheese kottu, biriyani, string hoppers & more. Open 24 hours, 7 days. Est. 2009. One location at 329 Galle Road, Kollupitiya, Colombo 03. No branches." />
+    <meta name="keywords" content="Hotel de Plaza, kottu Colombo, best kottu Colombo, kottu restaurant Colombo, cheese kottu, dolphin kottu, kottu Kollupitiya, Colombo food, late night food Colombo, biriyani Colombo, string hoppers Colombo, 24 hour restaurant Colombo, Galle Road restaurant, kottu near me, best food Colombo, plaza kottu, hotel de plaza menu, Colombo restaurant open 24 hours, Sri Lankan food Colombo, Indian food Colombo, kottu and biriyani Colombo" />
+    <meta name="author" content="Hotel de Plaza" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <link rel="canonical" href="https://hoteldeplaza.lk/" />
+
+    <!-- ── Open Graph (Facebook/WhatsApp sharing) ── -->
+    <meta property="og:type" content="restaurant" />
+    <meta property="og:url" content="https://hoteldeplaza.lk/" />
+    <meta property="og:title" content="Hotel de Plaza | Best Kottu in Colombo | Open 24/7" />
+    <meta property="og:description" content="Colombo's most famous kottu restaurant since 2009. Cheese kottu, dolphin kottu, biriyani & more. Open 24/7 at 329 Galle Road, Kollupitiya. One location, no branches." />
+    <meta property="og:image" content="https://hoteldeplaza.lk/logo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Hotel de Plaza" />
+    <meta property="og:locale" content="en_LK" />
+
+    <!-- ── Twitter Card ── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Hotel de Plaza | Best Kottu in Colombo" />
+    <meta name="twitter:description" content="Colombo's original late-night kottu spot. Open 24/7. 329 Galle Road, Kollupitiya." />
+    <meta name="twitter:image" content="https://hoteldeplaza.lk/logo.png" />
+
+    <!-- ── Local Business Schema (Google Rich Results) ── -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Restaurant",
+      "name": "Hotel de Plaza",
+      "alternateName": ["Plaza Kottu", "Hotel De Plaza Colombo", "De Plaza Restaurant"],
+      "url": "https://hoteldeplaza.lk",
+      "logo": "https://hoteldeplaza.lk/logo.png",
+      "image": "https://hoteldeplaza.lk/logo.png",
+      "description": "Colombo's original and most famous kottu restaurant since 2009. Specialising in cheese kottu, dolphin kottu, palandi kottu, biriyani, string hoppers and more. Open 24 hours a day, 7 days a week. One location, no branches.",
+      "servesCuisine": ["Sri Lankan", "Indian", "Kottu", "Biriyani", "String Hoppers"],
+      "priceRange": "$$",
+      "telephone": "+94114852600",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "329 Galle Road, Kollupitiya",
+        "addressLocality": "Colombo",
+        "postalCode": "00300",
+        "addressCountry": "LK"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 6.9022,
+        "longitude": 79.8493
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "opens": "00:00",
+        "closes": "23:59"
+      },
+      "hasMap": "https://maps.app.goo.gl/dWGjmbBqn9FLYdxe9",
+      "sameAs": [
+        "https://web.facebook.com/hoteldeplaza",
+        "https://www.instagram.com/hotelde.plaza/",
+        "https://www.tiktok.com/@plazahote3"
+      ],
+      "menu": "https://hoteldeplaza.lk/menu",
+      "acceptsReservations": "False",
+      "keywords": "kottu, cheese kottu, dolphin kottu, biriyani, string hoppers, late night food, 24 hour restaurant, Colombo"
+    }
+    </script>
+
+    <!-- ── Preconnect for performance ── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://qzwhtsnrktxvrnapgkfq.supabase.co" />
+
+    <!-- ── Prevent flash of wrong theme ── -->
+    <script>
+      // Prevent white flash on dark mode load
+      (function() {
+        try {
+          document.documentElement.style.background = '#0a0a0a';
+          document.body && (document.body.style.background = '#0a0a0a');
+        } catch(e) {}
+      })();
+    </script>
   </head>
-  <body>
+  <body style="background:#0a0a0a;margin:0;padding:0;">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

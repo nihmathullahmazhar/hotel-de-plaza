@@ -415,7 +415,7 @@ export default function App(){
   const A='#e85b25'
 
   return(
-    <div style={{background:T.bg,color:T.text,fontFamily:"'DM Sans',sans-serif",overflowX:'hidden'}}>
+    <div style={{background:T.bg,color:T.text,fontFamily:"'DM Sans',sans-serif",overflowX:'hidden',minHeight:'100vh'}}>
 
       {/* ── NAVBAR ── */}
       <nav style={{position:'fixed',top:0,left:0,right:0,zIndex:200,background:scrolled?(dark?'rgba(10,10,10,0.97)':'rgba(244,240,235,0.97)'):'transparent',borderBottom:scrolled?`1px solid ${T.border}`:'none',backdropFilter:scrolled?'blur(20px)':'none',transition:'all 0.3s',padding:'0 clamp(20px,5vw,60px)',height:68,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
@@ -483,10 +483,25 @@ export default function App(){
           <p style={{fontSize:'clamp(13px,2vw,17px)',color:'rgba(255,255,255,0.7)',maxWidth:480,lineHeight:1.7,margin:'20px 0 36px',fontWeight:500}}>
             Colombo's original late-night kottu spot. One kitchen, one location, no compromises — since 2009.
           </p>
-          {/* Stamp */}
-          <div style={{position:'absolute',top:88,right:'clamp(20px,6vw,80px)',opacity:0.9}}>
-            <div style={{width:96,height:96,borderRadius:'50%',border:`3px solid ${A}99`,display:'flex',alignItems:'center',justifyContent:'center',transform:'rotate(-15deg)',background:`${A}18`,backdropFilter:'blur(4px)'}}>
-              <p style={{margin:0,fontSize:9,fontWeight:800,color:A,letterSpacing:'0.08em',textTransform:'uppercase',textAlign:'center',lineHeight:1.5}}>One<br/>Location<br/>No Branches</p>
+          {/* Stamp badge - rotated ink stamp style */}
+          <div style={{position:'absolute',top:88,right:'clamp(16px,5vw,72px)',zIndex:6}}>
+            <div style={{
+              width:110,height:110,borderRadius:'50%',
+              border:'3px dashed rgba(232,91,37,0.85)',
+              outline:'2px solid rgba(232,91,37,0.3)',
+              outlineOffset:'4px',
+              display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
+              transform:'rotate(-18deg)',
+              background:'rgba(232,91,37,0.08)',
+              backdropFilter:'blur(6px)',
+              boxShadow:'0 0 0 1px rgba(232,91,37,0.2), inset 0 0 20px rgba(232,91,37,0.05)',
+            }}>
+              <div style={{width:80,height:80,borderRadius:'50%',border:'1.5px solid rgba(232,91,37,0.5)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:1}}>
+                <p style={{margin:0,fontSize:8,fontWeight:900,color:'rgba(232,91,37,0.95)',letterSpacing:'0.18em',textTransform:'uppercase',textAlign:'center',lineHeight:1.3,fontFamily:"'Bebas Neue',sans-serif",fontSize:11}}>ONE</p>
+                <div style={{width:40,height:1,background:'rgba(232,91,37,0.5)',margin:'2px 0'}}/>
+                <p style={{margin:0,fontWeight:900,color:'rgba(232,91,37,0.95)',letterSpacing:'0.1em',textTransform:'uppercase',textAlign:'center',lineHeight:1.2,fontFamily:"'Bebas Neue',sans-serif",fontSize:9}}>LOCATION</p>
+                <p style={{margin:0,fontWeight:900,color:'rgba(232,91,37,0.95)',letterSpacing:'0.1em',textTransform:'uppercase',textAlign:'center',lineHeight:1.2,fontFamily:"'Bebas Neue',sans-serif",fontSize:9}}>NO BRANCHES</p>
+              </div>
             </div>
           </div>
           <div style={{display:'flex',gap:12,flexWrap:'wrap',justifyContent:'center'}}>
@@ -890,6 +905,7 @@ export default function App(){
         @keyframes promoBannerIn{0%{opacity:0;transform:translateX(-40px) scale(0.9)}60%{transform:translateX(4px) scale(1.02)}100%{opacity:1;transform:translateX(0) scale(1)}}
         @keyframes promoGlow{0%,100%{opacity:0.08}50%{opacity:0.22}}
         @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes waPulse{0%,100%{box-shadow:0 6px 28px rgba(37,211,102,0.5),0 2px 8px rgba(0,0,0,0.3)}50%{box-shadow:0 6px 36px rgba(37,211,102,0.7),0 0 0 8px rgba(37,211,102,0.1),0 2px 8px rgba(0,0,0,0.3)}}
         @keyframes promoPulse{0%,100%{opacity:0.18}50%{opacity:0.28}}
         @keyframes promoDot{0%,100%{box-shadow:0 0 4px #e85b25}50%{box-shadow:0 0 10px #e85b25,0 0 20px rgba(232,91,37,0.4)}}
         @keyframes promoBannerIn{0%{opacity:0;transform:translateX(-40px) scale(0.9)}60%{transform:translateX(6px) scale(1.02)}100%{opacity:1;transform:translateX(0) scale(1)}}
@@ -912,6 +928,7 @@ export default function App(){
         @keyframes slideUpFade{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
         @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,0.4)}50%{opacity:.8;box-shadow:0 0 0 6px rgba(34,197,94,0)}}
         @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes waPulse{0%,100%{box-shadow:0 6px 28px rgba(37,211,102,0.5),0 2px 8px rgba(0,0,0,0.3)}50%{box-shadow:0 6px 36px rgba(37,211,102,0.7),0 0 0 8px rgba(37,211,102,0.1),0 2px 8px rgba(0,0,0,0.3)}}
         @keyframes promoPulse{0%,100%{opacity:0.18}50%{opacity:0.28}}
         @keyframes promoDot{0%,100%{box-shadow:0 0 4px #e85b25}50%{box-shadow:0 0 10px #e85b25,0 0 20px rgba(232,91,37,0.4)}}
         @keyframes promoPulse{0%,100%{box-shadow:0 0 0 1px #e85b2544,0 0 16px #e85b2522}50%{box-shadow:0 0 0 2px #e85b2566,0 0 28px #e85b2544}}

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Allow: /menu
+
+Sitemap: https://hoteldeplaza.lk/sitemap.xml
+
+# Block admin panel from indexing
+Disallow: /owner
