@@ -750,7 +750,7 @@ export default function App(){
           <div>
             <p style={{color:A,fontSize:9,fontWeight:800,letterSpacing:'0.35em',textTransform:'uppercase',marginBottom:22}}>Quick Links</p>
             <div style={{display:'flex',flexDirection:'column',gap:13}}>
-              {[{label:'Full Menu',action:()=>navigate('/menu')},{label:'About Us',action:()=>setModal('about')},{label:'Contact Us',action:()=>setModal('contact')},{label:'Order on Uber Eats',href:UBER_EATS_URL},{label:'WhatsApp Order',href:`https://wa.me/${WHATSAPP_NUM}?text=${WHATSAPP_MSG}`},{label:'Find Us on Maps',href:'https://maps.app.goo.gl/dWGjmbBqn9FLYdxe9'}].map((l,i)=>l.href?(
+              {[{label:'Full Menu',action:()=>navigate('/menu')},{label:'About Us',action:()=>setModal('about')},{label:'Careers',action:()=>navigate('/careers')},{label:'Contact Us',action:()=>setModal('contact')},{label:'Order on Uber Eats',href:UBER_EATS_URL},{label:'WhatsApp Order',href:`https://wa.me/${WHATSAPP_NUM}?text=${WHATSAPP_MSG}`},{label:'Find Us on Maps',href:'https://maps.app.goo.gl/dWGjmbBqn9FLYdxe9'}].map((l,i)=>l.href?(
                 <a key={i} href={l.href} target={l.href.startsWith('#')?'_self':'_blank'} rel="noopener noreferrer" style={{color:'rgba(255,255,255,0.35)',fontSize:13,textDecoration:'none',fontWeight:500,transition:'all 0.18s'}}
                   onMouseEnter={e=>{e.currentTarget.style.color=A;e.currentTarget.style.paddingLeft='6px'}}
                   onMouseLeave={e=>{e.currentTarget.style.color='rgba(255,255,255,0.35)';e.currentTarget.style.paddingLeft='0'}}

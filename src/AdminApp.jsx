@@ -7,7 +7,7 @@ import {
   Users, Menu, LayoutGrid, Star,
   AlertCircle, Upload, Shield, UserPlus,
   Flame, Package, ToggleRight,
-  Utensils, Tag, DollarSign, FolderOpen, Info, Bell, Clock,
+  Utensils, Tag, DollarSign, FolderOpen, Info, Bell, Clock, TrendingUp, Briefcase,
   Megaphone, ImageIcon, MessageCircle, Calendar, Eye, EyeOff, Link
 } from 'lucide-react';
 
@@ -1978,6 +1978,8 @@ function Sidebar({ page, setPage, profile, onSignOut, mobileOpen, onMobileClose,
     { id:'featured',    icon:<Star size={16}/>,         label:'Featured & Tagged' },
     { id:'unavailable', icon:<AlertCircle size={16}/>,  label:'Unavailable'       },
     { id:'archived',    icon:<Archive size={16}/>,      label:'Archived'          },
+    { id:'analytics',   icon:<TrendingUp size={16}/>,   label:'Analytics'         },
+    { id:'jobs',        icon:<Briefcase size={16}/>,    label:'Careers / Jobs'    },
   ];
   const handleNav = (id) => { setPage(id); if(onMobileClose) onMobileClose(); };
   return (
@@ -2029,6 +2031,227 @@ const USERNAME_MAP = {
   'staff':   'staff@plaza.com',
 };
 
+
+// ── Jobs Manager ──────────────────────────────────────────────
+function JobsManager({ showToast }) {
+  const [jobs,    setJobs]    = useState([])
+  const [loading, setLoading] = useState(true)
+  const [editing, setEditing] = useState(null)   // null | 'new' | job object
+  const [saving,  setSaving]  = useState(false)
+
+  const blank = { title:'', department:'', type:'full-time', location:'Colombo 03', description:'', requirements:'', salary_range:'', active:true, google_form_url:'', whatsapp_message:'Hi, I am applying for the position of {title} at Hotel de Plaza. Please find my CV attached.', display_order:0 }
+  const [form, setForm] = useState(blank)
+
+  const load = async () => {
+    setLoading(true)
+    const { data } = await supabase.from('jobs').select('*').order('display_order').order('created_at', { ascending:false })
+    setJobs(data || [])
+    setLoading(false)
+  }
+
+  useEffect(() => { load() }, [])
+
+  const openNew  = () => { setForm(blank); setEditing('new') }
+  const openEdit = job => { setForm({...job}); setEditing(job) }
+
+  const save = async () => {
+    if (!form.title.trim()) { showToast('Title is required','error'); return }
+    setSaving(true)
+    const payload = { title:form.title.trim(), department:form.department.trim()||null, type:form.type, location:form.location.trim()||'Colombo 03', description:form.description.trim()||null, requirements:form.requirements.trim()||null, salary_range:form.salary_range.trim()||null, active:form.active, google_form_url:form.google_form_url.trim()||null, whatsapp_message:form.whatsapp_message.trim()||null, display_order:Number(form.display_order)||0 }
+    if (editing === 'new') {
+      const { error } = await supabase.from('jobs').insert(payload)
+      if (error) { showToast('Failed to create job','error') }
+      else { showToast('Job created!'); setEditing(null); load() }
+    } else {
+      const { error } = await supabase.from('jobs').update(payload).eq('id', editing.id)
+      if (error) { showToast('Failed to update job','error') }
+      else { showToast('Job updated!'); setEditing(null); load() }
+    }
+    setSaving(false)
+  }
+
+  const toggleActive = async (job) => {
+    await supabase.from('jobs').update({ active: !job.active }).eq('id', job.id)
+    load()
+    showToast(job.active ? 'Job hidden' : 'Job published')
+  }
+
+  const deleteJob = async (job) => {
+    if (!confirm(`Delete "${job.title}"?`)) return
+    await supabase.from('jobs').delete().eq('id', job.id)
+    showToast('Job deleted')
+    load()
+  }
+
+  const T2 = { surface:'var(--surface)', border:'var(--border)', text:'var(--text)', muted:'var(--muted)', accent:'#e85b25' }
+
+  const TYPE_OPTS = ['full-time','part-time','contract','internship']
+  const TYPE_COLORS = { 'full-time':'#22c55e','part-time':'#3b82f6','contract':'#f59e0b','internship':'#8b5cf6' }
+
+  return (
+    <div>
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:24, flexWrap:'wrap', gap:12 }}>
+        <div>
+          <h1 style={{ fontSize:28, fontWeight:800, margin:'0 0 4px' }}>Careers / Jobs</h1>
+          <p style={{ margin:0, fontSize:13, color:'#666' }}>Manage job listings shown on the Careers page</p>
+        </div>
+        <button onClick={openNew} style={{ background:'#e85b25', color:'#fff', border:'none', borderRadius:12, padding:'10px 20px', fontSize:13, fontWeight:700, cursor:'pointer', display:'flex', alignItems:'center', gap:7, fontFamily:"'DM Sans',sans-serif" }}>
+          <Briefcase size={15}/> + New Job
+        </button>
+      </div>
+
+      {/* Job form modal */}
+      {editing !== null && (
+        <>
+          <div onClick={()=>setEditing(null)} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.6)', zIndex:200, backdropFilter:'blur(4px)' }}/>
+          <div style={{ position:'fixed', top:'50%', left:'50%', transform:'translate(-50%,-50%)', zIndex:201, background:'var(--card)', border:'1px solid var(--border)', borderRadius:20, padding:28, width:'min(600px,95vw)', maxHeight:'90vh', overflowY:'auto', boxShadow:'0 24px 80px rgba(0,0,0,0.5)' }}>
+            <h2 style={{ margin:'0 0 20px', fontSize:20, fontWeight:800 }}>{editing==='new'?'New Job Listing':'Edit Job Listing'}</h2>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }} className="promo-grid">
+              {/* Title */}
+              <div style={{ gridColumn:'1/-1' }}>
+                <label style={{ fontSize:11, fontWeight:700, color:'#666', letterSpacing:'0.15em', textTransform:'uppercase', display:'block', marginBottom:6 }}>Job Title *</label>
+                <input value={form.title} onChange={e=>setForm(f=>({...f,title:e.target.value}))} placeholder="e.g. Head Chef, Cashier, Delivery Rider"
+                  style={{ width:'100%', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:10, padding:'11px 13px', fontSize:14, color:'var(--text)', outline:'none', fontFamily:"'DM Sans',sans-serif", boxSizing:'border-box' }}
+                  onFocus={e=>e.target.style.borderColor='#e85b25'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+              </div>
+              {/* Department */}
+              <div>
+                <label style={{ fontSize:11, fontWeight:700, color:'#666', letterSpacing:'0.15em', textTransform:'uppercase', display:'block', marginBottom:6 }}>Department</label>
+                <input value={form.department} onChange={e=>setForm(f=>({...f,department:e.target.value}))} placeholder="e.g. Kitchen, Operations"
+                  style={{ width:'100%', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:10, padding:'11px 13px', fontSize:13, color:'var(--text)', outline:'none', fontFamily:"'DM Sans',sans-serif", boxSizing:'border-box' }}
+                  onFocus={e=>e.target.style.borderColor='#e85b25'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+              </div>
+              {/* Type */}
+              <div>
+                <label style={{ fontSize:11, fontWeight:700, color:'#666', letterSpacing:'0.15em', textTransform:'uppercase', display:'block', marginBottom:6 }}>Employment Type</label>
+                <select value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}
+                  style={{ width:'100%', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:10, padding:'11px 13px', fontSize:13, color:'var(--text)', outline:'none', fontFamily:"'DM Sans',sans-serif", boxSizing:'border-box', cursor:'pointer' }}>
+                  {TYPE_OPTS.map(t=><option key={t} value={t}>{t.charAt(0).toUpperCase()+t.slice(1).replace('-',' ')}</option>)}
+                </select>
+              </div>
+              {/* Location */}
+              <div>
+                <label style={{ fontSize:11, fontWeight:700, color:'#666', letterSpacing:'0.15em', textTransform:'uppercase', display:'block', marginBottom:6 }}>Location</label>
+                <input value={form.location} onChange={e=>setForm(f=>({...f,location:e.target.value}))} placeholder="Colombo 03"
+                  style={{ width:'100%', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:10, padding:'11px 13px', fontSize:13, color:'var(--text)', outline:'none', fontFamily:"'DM Sans',sans-serif", boxSizing:'border-box' }}
+                  onFocus={e=>e.target.style.borderColor='#e85b25'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+              </div>
+              {/* Salary */}
+              <div>
+                <label style={{ fontSize:11, fontWeight:700, color:'#666', letterSpacing:'0.15em', textTransform:'uppercase', display:'block', marginBottom:6 }}>Salary Range</label>
+                <input value={form.salary_range} onChange={e=>setForm(f=>({...f,salary_range:e.target.value}))} placeholder="e.g. Rs.30,000 – Rs.45,000"
+                  style={{ width:'100%', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:10, padding:'11px 13px', fontSize:13, color:'var(--text)', outline:'none', fontFamily:"'DM Sans',sans-serif", boxSizing:'border-box' }}
+                  onFocus={e=>e.target.style.borderColor='#e85b25'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+              </div>
+              {/* Display order */}
+              <div>
+                <label style={{ fontSize:11, fontWeight:700, color:'#666', letterSpacing:'0.15em', textTransform:'uppercase', display:'block', marginBottom:6 }}>Display Order</label>
+                <input type="number" value={form.display_order} onChange={e=>setForm(f=>({...f,display_order:e.target.value}))} placeholder="0"
+                  style={{ width:'100%', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:10, padding:'11px 13px', fontSize:13, color:'var(--text)', outline:'none', fontFamily:"'DM Sans',sans-serif", boxSizing:'border-box' }}
+                  onFocus={e=>e.target.style.borderColor='#e85b25'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+              </div>
+              {/* Description */}
+              <div style={{ gridColumn:'1/-1' }}>
+                <label style={{ fontSize:11, fontWeight:700, color:'#666', letterSpacing:'0.15em', textTransform:'uppercase', display:'block', marginBottom:6 }}>Job Description</label>
+                <textarea value={form.description} onChange={e=>setForm(f=>({...f,description:e.target.value}))} placeholder="Describe the role, responsibilities..."
+                  style={{ width:'100%', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:10, padding:'11px 13px', fontSize:13, color:'var(--text)', outline:'none', fontFamily:"'DM Sans',sans-serif", boxSizing:'border-box', minHeight:100, resize:'vertical' }}
+                  onFocus={e=>e.target.style.borderColor='#e85b25'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+              </div>
+              {/* Requirements */}
+              <div style={{ gridColumn:'1/-1' }}>
+                <label style={{ fontSize:11, fontWeight:700, color:'#666', letterSpacing:'0.15em', textTransform:'uppercase', display:'block', marginBottom:6 }}>Requirements</label>
+                <textarea value={form.requirements} onChange={e=>setForm(f=>({...f,requirements:e.target.value}))} placeholder="List qualifications, experience needed..."
+                  style={{ width:'100%', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:10, padding:'11px 13px', fontSize:13, color:'var(--text)', outline:'none', fontFamily:"'DM Sans',sans-serif", boxSizing:'border-box', minHeight:80, resize:'vertical' }}
+                  onFocus={e=>e.target.style.borderColor='#e85b25'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+              </div>
+              {/* Google Form URL */}
+              <div style={{ gridColumn:'1/-1' }}>
+                <label style={{ fontSize:11, fontWeight:700, color:'#666', letterSpacing:'0.15em', textTransform:'uppercase', display:'block', marginBottom:6 }}>Google Form URL (optional)</label>
+                <input value={form.google_form_url} onChange={e=>setForm(f=>({...f,google_form_url:e.target.value}))} placeholder="https://forms.gle/..."
+                  style={{ width:'100%', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:10, padding:'11px 13px', fontSize:13, color:'var(--text)', outline:'none', fontFamily:"'DM Sans',sans-serif", boxSizing:'border-box' }}
+                  onFocus={e=>e.target.style.borderColor='#e85b25'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+                <p style={{ margin:'4px 0 0', fontSize:11, color:'#666' }}>If provided, an "Apply via Form" button appears on the careers page</p>
+              </div>
+              {/* WhatsApp message */}
+              <div style={{ gridColumn:'1/-1' }}>
+                <label style={{ fontSize:11, fontWeight:700, color:'#666', letterSpacing:'0.15em', textTransform:'uppercase', display:'block', marginBottom:6 }}>WhatsApp Message Template</label>
+                <textarea value={form.whatsapp_message} onChange={e=>setForm(f=>({...f,whatsapp_message:e.target.value}))} placeholder="Use {title} as placeholder for job title"
+                  style={{ width:'100%', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:10, padding:'11px 13px', fontSize:13, color:'var(--text)', outline:'none', fontFamily:"'DM Sans',sans-serif", boxSizing:'border-box', minHeight:72, resize:'vertical' }}
+                  onFocus={e=>e.target.style.borderColor='#e85b25'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+                <p style={{ margin:'4px 0 0', fontSize:11, color:'#666' }}>Use <strong>{'{title}'}</strong> and it will be replaced with the job title automatically</p>
+              </div>
+              {/* Active toggle */}
+              <div style={{ gridColumn:'1/-1', display:'flex', alignItems:'center', gap:12 }}>
+                <div onClick={()=>setForm(f=>({...f,active:!f.active}))}
+                  style={{ width:44, height:24, borderRadius:999, background:form.active?'#22c55e':'var(--border)', position:'relative', cursor:'pointer', transition:'background 0.2s', flexShrink:0 }}>
+                  <div style={{ position:'absolute', top:3, left:form.active?23:3, width:18, height:18, borderRadius:'50%', background:'#fff', transition:'left 0.2s', boxShadow:'0 1px 4px rgba(0,0,0,0.3)' }}/>
+                </div>
+                <span style={{ fontSize:13, fontWeight:600, color:'var(--text)' }}>{form.active?'Published — visible on careers page':'Hidden — not visible to public'}</span>
+              </div>
+            </div>
+            {/* Save / Cancel */}
+            <div style={{ display:'flex', gap:10, marginTop:20 }}>
+              <button onClick={()=>setEditing(null)} style={{ flex:1, background:'var(--surface)', border:'1px solid var(--border)', borderRadius:12, padding:'12px', fontSize:13, fontWeight:700, cursor:'pointer', color:'var(--muted)', fontFamily:"'DM Sans',sans-serif" }}>
+                Cancel
+              </button>
+              <button onClick={save} disabled={saving}
+                style={{ flex:2, background:saving?'var(--border)':'#e85b25', border:'none', borderRadius:12, padding:'12px', fontSize:13, fontWeight:800, cursor:saving?'wait':'pointer', color:'#fff', fontFamily:"'DM Sans',sans-serif", display:'flex', alignItems:'center', justifyContent:'center', gap:7 }}>
+                {saving ? 'Saving...' : editing==='new' ? '+ Create Job' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Jobs list */}
+      {loading ? (
+        <div style={{ textAlign:'center', padding:'60px 0', opacity:.4 }}>
+          <div style={{ width:28, height:28, border:'3px solid #e85b25', borderTopColor:'transparent', borderRadius:'50%', animation:'spin 0.8s linear infinite', margin:'0 auto' }}/>
+        </div>
+      ) : jobs.length===0 ? (
+        <div style={{ textAlign:'center', padding:'60px 0', opacity:.25 }}>
+          <Briefcase size={44} style={{ margin:'0 auto 12px' }}/>
+          <p style={{ fontWeight:800, textTransform:'uppercase', letterSpacing:'0.15em', fontSize:12 }}>No job listings yet</p>
+        </div>
+      ) : (
+        <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+          {jobs.map(job => {
+            const typeColor = TYPE_COLORS[job.type]||'#666'
+            return (
+              <div key={job.id} style={{ background:'var(--card)', border:'1px solid var(--border)', borderRadius:14, padding:'16px 18px', display:'flex', alignItems:'center', gap:14, flexWrap:'wrap' }}>
+                <div style={{ width:10, height:10, borderRadius:'50%', background:job.active?'#22c55e':'#ef4444', flexShrink:0 }}/>
+                <div style={{ flex:1, minWidth:200 }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap', marginBottom:3 }}>
+                    <span style={{ fontSize:14, fontWeight:800, color:'var(--text)' }}>{job.title}</span>
+                    <span style={{ background:typeColor+'18', color:typeColor, border:`1px solid ${typeColor}44`, borderRadius:999, padding:'1px 9px', fontSize:10, fontWeight:800, textTransform:'uppercase' }}>{job.type}</span>
+                    {!job.active && <span style={{ background:'rgba(239,68,68,0.1)', color:'#ef4444', border:'1px solid rgba(239,68,68,0.3)', borderRadius:999, padding:'1px 9px', fontSize:10, fontWeight:700 }}>Hidden</span>}
+                  </div>
+                  <p style={{ margin:0, fontSize:12, color:'var(--muted)' }}>
+                    {[job.department, job.location, job.salary_range].filter(Boolean).join(' · ')}
+                  </p>
+                </div>
+                <div style={{ display:'flex', gap:8, flexShrink:0 }}>
+                  <button onClick={()=>toggleActive(job)}
+                    style={{ background:'none', border:'1px solid var(--border)', borderRadius:9, padding:'6px 12px', fontSize:11, fontWeight:700, cursor:'pointer', color:job.active?'#ef4444':'#22c55e', fontFamily:"'DM Sans',sans-serif" }}>
+                    {job.active?'Hide':'Show'}
+                  </button>
+                  <button onClick={()=>openEdit(job)}
+                    style={{ background:'#e85b2518', border:'1px solid #e85b2544', borderRadius:9, padding:'6px 14px', fontSize:11, fontWeight:700, cursor:'pointer', color:'#e85b25', fontFamily:"'DM Sans',sans-serif" }}>
+                    Edit
+                  </button>
+                  <button onClick={()=>deleteJob(job)}
+                    style={{ background:'rgba(239,68,68,0.08)', border:'1px solid rgba(239,68,68,0.25)', borderRadius:9, padding:'6px 10px', cursor:'pointer', color:'#ef4444', display:'flex', alignItems:'center' }}>
+                    ✕
+                  </button>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function AdminApp() {
   const [profile,  setProfile]  = useState({ id:'owner', email:'owner@plaza.com', role:'owner' });
@@ -2090,6 +2313,8 @@ export default function AdminApp() {
           {page==='promotions'  && <PromotionsManager showToast={showToast}/>}
           {page==='featured'    && <FeaturedTaggedManager items={items} sections={sections} reload={loadData} showToast={showToast}/>}
           {page==='unavailable'  && <UnavailableManager  items={items} sections={sections} reload={loadData} showToast={showToast}/>}
+          {page==='analytics'   && <AnalyticsPage embedded={true}/>}
+          {page==='jobs'        && <JobsManager showToast={showToast}/>}
           {page==='archived'    && <ArchivedManager    sections={sections} items={items} reload={loadData} showToast={showToast}/>}
         {/* ── Admin Footer ── */}
         <footer style={{ marginTop: 60, borderTop: `1px solid ${T.border}`, padding: '20px 0 8px' }}>
